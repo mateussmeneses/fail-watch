@@ -1,0 +1,24 @@
+# Dependencias (caso venha a usar build tools no futuro)
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Artefatos de empacotamento da extensao
+*.zip
+*.crx
+*.pem
+dist/
+build/
+web-ext-artifacts/
+
+# Ambiente / editor
+.env
+.env.*
+.DS_Store
+Thumbs.db
+.idea/
+*.log
+
+# Kiro
+.kiro/

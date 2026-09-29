@@ -1,0 +1,400 @@
+/* Estilo compartilhado por popup e painel do DevTools. Tema escuro por
+   padrao, aproximando a estetica do DevTools. */
+
+:root {
+  --bg: #1e1e1e;
+  --bg-alt: #252526;
+  --bg-hover: #2a2d2e;
+  --border: #3c3c3c;
+  --text: #d4d4d4;
+  --text-dim: #9d9d9d;
+  --accent: #4daafc;
+  --danger: #f14c4c;
+  --warn: #cca700;
+  --ok: #89d185;
+  --mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 13px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Popup tem largura fixa; devtools ocupa tudo. */
+body.popup {
+  width: 760px;
+  height: 560px;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.toolbar .title {
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+.toolbar .title .dot {
+  color: var(--danger);
+}
+
+.toolbar .spacer {
+  flex: 1;
+}
+
+.toolbar input[type='search'] {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-width: 160px;
+}
+
+.btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn:hover {
+  background: var(--bg-hover);
+}
+
+.btn.danger {
+  border-color: #5a2d2d;
+  color: #f5a3a3;
+}
+
+.count-pill {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 2px 8px;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.list {
+  flex: 0 0 42%;
+  overflow-y: auto;
+  border-right: 1px solid var(--border);
+}
+
+.list-row {
+  display: grid;
+  grid-template-columns: 54px 44px 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.list-row:hover {
+  background: var(--bg-hover);
+}
+
+.list-row.selected {
+  background: #094771;
+}
+
+.status {
+  font-family: var(--mono);
+  font-weight: 600;
+}
+
+.status.s4 {
+  color: var(--warn);
+}
+
+.status.s5 {
+  color: var(--danger);
+}
+
+.status.err {
+  color: var(--danger);
+}
+
+.method {
+  font-family: var(--mono);
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.url-cell {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.url-cell .path {
+  color: var(--text);
+}
+
+.url-cell .host {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.time-cell {
+  color: var(--text-dim);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.detail {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+
+.detail-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--text-dim);
+}
+
+.detail-header {
+  position: sticky;
+  top: 0;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.detail-header .d-url {
+  font-family: var(--mono);
+  font-size: 12px;
+  word-break: break-all;
+  width: 100%;
+  color: var(--text);
+}
+
+.detail-actions {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.section {
+  border-bottom: 1px solid var(--border);
+}
+
+.section > h3 {
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-dim);
+  background: var(--bg-alt);
+  cursor: pointer;
+  user-select: none;
+}
+
+.section > h3::before {
+  content: '▾ ';
+  color: var(--text-dim);
+}
+
+.section.collapsed > h3::before {
+  content: '▸ ';
+}
+
+.section.collapsed .section-body {
+  display: none;
+}
+
+.section-body {
+  padding: 8px 12px;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.kv .k {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.kv .v {
+  color: var(--text);
+  word-break: break-all;
+}
+
+pre.body-view {
+  margin: 0;
+  padding: 8px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.badge-inline {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-family: var(--mono);
+}
+
+.badge-inline.err {
+  background: #5a2d2d;
+  color: #f5a3a3;
+}
+
+.muted {
+  color: var(--text-dim);
+}
+
+.truncated-note {
+  color: var(--warn);
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  color: var(--text-dim);
+}
+
+.toast {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 12px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+}
+
+/* --- Melhorias: agrupamento, anotacao, screenshot, Azure DevOps --- */
+
+.count-badge {
+  display: inline-block;
+  background: #5a4b00;
+  color: #ffd866;
+  border-radius: 8px;
+  padding: 0 6px;
+  font-size: 10px;
+  font-family: var(--mono);
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.note-dot,
+.shot-dot {
+  color: var(--text-dim);
+  font-size: 11px;
+  margin-left: 4px;
+}
+
+.note-dot {
+  color: var(--accent);
+}
+
+.badge-inline.count {
+  background: #5a4b00;
+  color: #ffd866;
+}
+
+.btn.primary {
+  background: #0a5aa8;
+  border-color: #0a5aa8;
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: #0e6cc9;
+}
+
+.note-input {
+  width: 100%;
+  min-height: 70px;
+  resize: vertical;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 8px;
+  font-family: inherit;
+  font-size: 12px;
+}
+
+.note-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.shot-img {
+  max-width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  display: block;
+}

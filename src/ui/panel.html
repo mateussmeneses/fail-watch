@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>FailWatch</title>
+    <link rel="stylesheet" href="ui.css" />
+  </head>
+  <body class="devtools">
+    <div class="app">
+      <div class="toolbar">
+        <span class="title">Fail<span class="dot">Watch</span></span>
+        <span class="count-pill" id="count">0 falhas</span>
+        <input type="search" id="search" placeholder="Filtrar por URL, status, metodo..." />
+        <span class="spacer"></span>
+        <button class="btn" id="btn-refresh" title="Recarregar">↻ Recarregar</button>
+        <button class="btn" id="btn-har-all" title="Exportar tudo como HAR">Exportar HAR</button>
+        <button class="btn" id="btn-options" title="Opcoes">⚙ Opcoes</button>
+        <button class="btn danger" id="btn-clear" title="Limpar historico">Limpar</button>
+      </div>
+      <div class="body">
+        <div class="list" id="list"></div>
+        <div class="detail" id="detail">
+          <div class="detail-empty">Selecione uma falha para ver os detalhes.</div>
+        </div>
+      </div>
+    </div>
+    <div class="toast" id="toast"></div>
+    <script type="module" src="panel.js"></script>
+  </body>
+</html>

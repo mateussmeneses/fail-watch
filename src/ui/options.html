@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>FailWatch — Opcoes</title>
+    <link rel="stylesheet" href="ui.css" />
+    <style>
+      .options-wrap {
+        max-width: 640px;
+        margin: 0 auto;
+        padding: 24px;
+      }
+      h1 {
+        font-size: 18px;
+        margin: 0 0 4px;
+      }
+      .subtitle {
+        color: var(--text-dim);
+        margin: 0 0 24px;
+      }
+      .field {
+        margin-bottom: 20px;
+      }
+      .field label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .field .hint {
+        color: var(--text-dim);
+        font-size: 12px;
+        margin-bottom: 8px;
+      }
+      .field input[type='number'],
+      .field textarea,
+      .field select {
+        background: var(--bg-alt);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 4px;
+        padding: 6px 8px;
+        width: 100%;
+        font-family: inherit;
+      }
+      .field textarea {
+        font-family: var(--mono);
+        min-height: 90px;
+        resize: vertical;
+      }
+      .check {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .check input {
+        width: auto;
+      }
+      .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .save-note {
+        color: var(--ok);
+        font-size: 12px;
+        align-self: center;
+        opacity: 0;
+        transition: opacity 0.2s;
+      }
+      .save-note.show {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="options-wrap">
+      <h1>Fail<span style="color: var(--danger)">Watch</span> — Opcoes</h1>
+      <p class="subtitle">Configure o que conta como falha e como os dados sao guardados.</p>
+
+      <div class="field">
+        <label for="minStatus">Status HTTP minimo para capturar</label>
+        <div class="hint">Requisicoes com status maior ou igual a este valor sao gravadas. Ex.: 400 captura erros de cliente e servidor; 500 captura apenas erros de servidor.</div>
+        <input type="number" id="minStatus" min="100" max="599" step="1" />
+      </div>
+
+      <div class="field">
+        <div class="check">
+          <input type="checkbox" id="captureNetworkErrors" />
+          <label for="captureNetworkErrors" style="margin: 0">Capturar erros de rede</label>
+        </div>
+        <div class="hint">Inclui requisicoes que falharam sem resposta HTTP (DNS, CORS, offline, timeout, abort).</div>
+      </div>
+
+      <div class="field">
+        <label for="maxEntries">Numero maximo de falhas guardadas</label>
+        <div class="hint">Ao ultrapassar, as falhas mais antigas sao descartadas.</div>
+        <input type="number" id="maxEntries" min="10" max="10000" step="10" />
+      </div>
+
+      <div class="field">
+        <label for="maxBodyChars">Tamanho maximo de cada corpo (caracteres)</label>
+        <div class="hint">Corpos maiores sao truncados para economizar espaco. O tamanho original fica registrado.</div>
+        <input type="number" id="maxBodyChars" min="1000" max="5000000" step="1000" />
+      </div>
+
+      <div class="field">
+        <div class="check">
+          <input type="checkbox" id="redactionEnabled" />
+          <label for="redactionEnabled" style="margin: 0">Redigir headers sensiveis</label>
+        </div>
+        <div class="hint">Substitui o valor destes headers por «redacted» antes de guardar. Importante ao compartilhar dumps.</div>
+        <textarea id="redactHeaders" placeholder="um header por linha"></textarea>
+      </div>
+
+      <div class="field">
+        <div class="check">
+          <input type="checkbox" id="webRequestFallback" />
+          <label for="webRequestFallback" style="margin: 0">Rede de seguranca (webRequest)</label>
+        </div>
+        <div class="hint">Usa a API webRequest para capturar falhas que a interceptacao de fetch/XHR nao ve (ex.: fora do contexto da pagina). Nao traz o corpo da resposta. Ao ligar, recarregue a extensao.</div>
+      </div>
+
+      <div class="field">
+        <label for="domainMode">Regras por dominio</label>
+        <div class="hint">Limite a captura a certos dominios. "Todos" captura tudo; "Allowlist" so os padroes listados; "Denylist" tudo menos os listados.</div>
+        <select id="domainMode">
+          <option value="all">Todos os dominios</option>
+          <option value="allowlist">Somente estes (allowlist)</option>
+          <option value="denylist">Todos menos estes (denylist)</option>
+        </select>
+        <div id="domainPatternsField" style="margin-top: 8px; display: none">
+          <div class="hint">Um padrao por linha. Use <code>*</code> como coringa. Ex.: <code>*.meu-app.com</code>, <code>api.exemplo.com</code></div>
+          <textarea id="domainPatterns" placeholder="*.meu-app.com"></textarea>
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="check">
+          <input type="checkbox" id="captureScreenshot" />
+          <label for="captureScreenshot" style="margin: 0">Capturar screenshot no momento da falha</label>
+        </div>
+        <div class="hint">Tira uma screenshot da aba visivel quando uma falha ocorre. Util para contexto no bug. So funciona com a aba ativa/visivel.</div>
+        <label for="screenshotThrottleMs" style="margin-top: 8px; font-weight: 400">Intervalo minimo entre screenshots por aba (ms)</label>
+        <input type="number" id="screenshotThrottleMs" min="500" max="60000" step="500" />
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="save">Salvar</button>
+        <button class="btn" id="reset">Restaurar padroes</button>
+        <span class="save-note" id="saveNote">Salvo</span>
+      </div>
+    </div>
+    <script type="module" src="options.js"></script>
+  </body>
+</html>
